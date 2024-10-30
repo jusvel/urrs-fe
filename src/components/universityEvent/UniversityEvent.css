@@ -1,0 +1,65 @@
+.event-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  height: 180px;
+  width: 80%;
+  justify-content: space-between;
+  color: #333333;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  .event-photo {
+    background-color: #777777;
+    width: 140px;
+    height: 140px;
+  }
+
+  .event-details {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+
+    .details-title {
+      font-size: 24px;
+      line-height: 24px;
+      margin-bottom: 10px;
+    }
+
+    .details-location {
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #777777;
+      font-size: 14px;
+    }
+
+    .details-description {
+      font-size: 14px;
+    }
+  }
+
+  .event-date {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    .date-day{
+      line-height: 64px;
+      font-size: 64px;
+      color: #E80A0A;
+      margin-bottom: 0;
+    }
+    .date-month{
+      line-height: 20px;
+      font-size: 20px;
+      color: #777777;
+      margin-bottom: 10px;
+    }
+    .date-time{
+      line-height: 24px;
+      font-size: 24px;
+
+    }
+  }
+}

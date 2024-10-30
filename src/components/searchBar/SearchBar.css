@@ -1,0 +1,6 @@
+.search-bar{
+  display: flex;
+  width: 80%;
+  justify-content: space-around;
+  flex-direction: row;
+}
