@@ -1,21 +1,10 @@
 import './App.css'
-import UniversityEvent from './components/universityEvent/UniversityEvent.tsx';
-import SearchBar from './components/searchBar/SearchBar.tsx';
-import Navbar from './components/navbar/Navbar.tsx'
+import { router } from './helpers/Router.tsx'
+import { RouterProvider } from 'react-router-dom';
 
 function App() {
-
-  return (<div className="root-div">
-      <Navbar/>
-      <SearchBar/>
-      <div className="events">
-        <UniversityEvent/>
-        <UniversityEvent/>
-        <UniversityEvent/>
-        <UniversityEvent/>
-        <UniversityEvent/>
-      </div>
-    </div>
+  return (
+    <RouterProvider router={router}/>
   )
 }
 
