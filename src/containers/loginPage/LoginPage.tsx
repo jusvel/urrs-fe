@@ -1,5 +1,5 @@
 import './LoginPage.css';
-import {login} from "./../../api/loginApi.js"
+import { login } from '../../api/loginApi.ts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,10 +17,10 @@ export default function LoginPage() {
       if (errorMessage) {
         setError(errorMessage);
       } else {
-        navigate('/')
+        navigate('/');
       }
-    } catch (err) {
-      setError('An unexpected error occurred.');
+    } catch (err: unknown) {
+      setError(`An unexpected error occurred. ${err}`);
     }
   };
 

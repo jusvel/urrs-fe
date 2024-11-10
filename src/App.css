@@ -4,12 +4,7 @@
   /*text-align: center;*/
 }
 
-.events{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-}
+
 
 .root-div
 {

@@ -5,11 +5,10 @@ export const getAuthToken = () => {
 }
 
 export const isAuthenticated = () => {
-  console.log(getAuthToken() !== null ? true : false)
   return getAuthToken() !== null ? true : false;
 }
 
-export const setAuthToken = (token) => {
+export const setAuthToken = (token: string) => {
   if(token){
     window.localStorage.setItem("auth_token", token);
   } else {
@@ -21,11 +20,11 @@ export const setAuthToken = (token) => {
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-export const request = (method, url, data) => {
+export const request = (method: string, url: string, data: object) => {
   const token = getAuthToken();
   let headers = {};
   if(token !==null && token !== "null") {
-    headers = {'Authorization': `Bearer: ${token}`}
+    headers = {'Authorization': `Bearer ${token}`}
   }
 
   return axios({

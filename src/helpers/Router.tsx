@@ -1,6 +1,6 @@
 import LoginPage from '../containers/loginPage/LoginPage.tsx';
 // @ts-ignore
-import { isAuthenticated } from './axiosHelper.js';
+import { isAuthenticated } from './axiosHelper.ts';
 
 import { createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute.tsx';
