@@ -5,7 +5,9 @@ export default function UniversityEvent({ universityEvent }) {
   const eventDate = new Date(universityEvent.eventDate);
   const day = eventDate.getDate()
   const month = eventDate.toLocaleString('default', {month: 'long'})
-  const time = eventDate.getHours() + ":" + eventDate.getMinutes()
+  let minutes = eventDate.getMinutes().toLocaleString();
+  if(minutes < 10) minutes = `0${minutes}`
+  const time = eventDate.getHours() + ":" + minutes
 
   return <div className="event-card">
     <div className="event-photo">

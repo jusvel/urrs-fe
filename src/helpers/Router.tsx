@@ -5,6 +5,7 @@ import { isAuthenticated } from './axiosHelper.ts';
 import { createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute.tsx';
 import HomePage from '../containers/homePage/HomePage.tsx';
+import CreateEvent from '../containers/createEvent/CreateEvent.tsx';
 
 export const router = createBrowserRouter(
   [
@@ -19,6 +20,10 @@ export const router = createBrowserRouter(
         {
           path: '/',
           element: <HomePage/>
+        },
+        {
+          path: '/create-event',
+          element: <CreateEvent/>
         }
       ]
     }

@@ -1,4 +1,4 @@
-import { request } from '../helpers/axiosHelper.ts';
+import {request} from '../helpers/axiosHelper.ts';
 
 export const getAllEvents = async () => {
   try {
@@ -8,6 +8,19 @@ export const getAllEvents = async () => {
     return error.response?.data?.message || 'An error occurred';
   }
 };
+
+export const createEvent = async (title, description, location, eventDate) => {
+  try{
+    return request("POST", "/events", {
+      "title": title,
+      "description": description,
+      "location": location,
+      "eventDate": eventDate
+    });
+  } catch (error) {
+    return error.response?.data?.message || 'An error occurred';
+  }
+}
 
 export const getRegisteredEvents = async () => {
   try {
