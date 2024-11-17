@@ -31,29 +31,4 @@ export const getRegisteredEvents = async () => {
   }
 };
 
-export const isRegisteredToEvent = async (eventId: string) => {
-  try {
-    const response = request('GET', `/events/registered/${eventId}`, {});
-    return response;
-  } catch (error) {
-    return error.response?.data?.message || 'An error occurred';
-  }
-};
 
-export const registerToEvent = async (eventId: string) => {
-  try {
-    const response = request('POST', `events/register/${eventId}`, {});
-    return response;
-  } catch (error: any) {
-    return error.response?.data?.message || 'An error occurred';
-  }
-};
-
-export const unregisterFromEvent = async (eventId: string) => {
-  try {
-    const resposne = request('DELETE', `events/register/${eventId}`, {});
-    return resposne;
-  } catch (error) {
-    return error.response?.data?.message || 'An error occurred';
-  }
-};

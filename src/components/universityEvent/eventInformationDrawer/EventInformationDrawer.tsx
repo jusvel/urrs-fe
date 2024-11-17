@@ -10,6 +10,7 @@ export default function EventInformationDrawer({
                                                  registerToCurrentEvent,
                                                  unregisterFromCurrentEvent,
                                                  setReviewModalOpen,
+                                                 eventAttendeeCount,
                                                }) {
   return (
     <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
@@ -17,6 +18,7 @@ export default function EventInformationDrawer({
         <Typography variant="h6" gutterBottom>{selectedEvent?.title}</Typography>
         <Typography variant="body2" gutterBottom>{selectedEvent?.description}</Typography>
         <Typography variant="subtitle2" gutterBottom><strong>Location:</strong> {selectedEvent?.location}</Typography>
+        <Typography variant="subtitle2" gutterBottom><strong>Attendee count:</strong> {eventAttendeeCount}</Typography>
         <Typography variant="subtitle2"
                     gutterBottom><strong>Date:</strong> {new Date(selectedEvent?.eventDate).toLocaleString()}
         </Typography>

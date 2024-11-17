@@ -1,13 +1,8 @@
 import UniversityEvent from '../../components/universityEvent/UniversityEvent.tsx';
 import React, { useEffect, useState } from 'react';
-import { getAllEvents, isRegisteredToEvent, registerToEvent, unregisterFromEvent } from '../../api/eventsApi';
-import {
-  Box, Button,
-  Drawer, Modal,
-  Typography,
-} from '@mui/material';
 import EventInformationDrawer from '../../components/universityEvent/eventInformationDrawer/EventInformationDrawer.tsx';
 import ReviewModal from '../../components/universityEvent/reviewModal/ReviewModal.tsx';
+import { getAttendeeCount, isRegisteredToEvent, registerToEvent, unregisterFromEvent } from '../../api/attendeesApi.ts';
 
 
 export default function EventList({ universityEvents }) {
@@ -15,6 +10,7 @@ export default function EventList({ universityEvents }) {
   const [open, setOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [isRegisteredToCurrentEvent, setIsRegisteredToCurrentEvent] = useState(false);
+  const [eventAttendeeCount, setEventAttendeeCount] = useState(0);
 
 
   const getIsRegisteredToEvent = async (id) => {
@@ -22,20 +18,28 @@ export default function EventList({ universityEvents }) {
     setIsRegisteredToCurrentEvent(response.data);
   };
 
+  const getCurrentEventAttendeeCount = async(id) => {
+    const response = await getAttendeeCount(id);
+    setEventAttendeeCount(response.data);
+  }
+
   const registerToCurrentEvent = (id) => {
     registerToEvent(id);
     setIsRegisteredToCurrentEvent(true);
+    getCurrentEventAttendeeCount(id);
   };
 
   const unregisterFromCurrentEvent = (id) => {
     unregisterFromEvent(id);
     setIsRegisteredToCurrentEvent(false);
+    getCurrentEventAttendeeCount(id);
   };
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
     setOpen(true);
     getIsRegisteredToEvent(event.id);
+    getCurrentEventAttendeeCount(event.id)
   };
 
 
@@ -56,6 +60,7 @@ export default function EventList({ universityEvents }) {
         registerToCurrentEvent={registerToCurrentEvent}
         unregisterFromCurrentEvent={unregisterFromCurrentEvent}
         setReviewModalOpen={setReviewModalOpen}
+        eventAttendeeCount={eventAttendeeCount}
       />
       <ReviewModal
         reviewModalOpen={reviewModalOpen}
