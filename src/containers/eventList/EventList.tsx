@@ -1,18 +1,20 @@
 import UniversityEvent from '../../components/universityEvent/UniversityEvent.tsx';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAllEvents, isRegisteredToEvent, registerToEvent, unregisterFromEvent } from '../../api/eventsApi';
 import {
   Box, Button,
-  Drawer,
+  Drawer, Modal,
   Typography,
 } from '@mui/material';
+import EventInformationDrawer from '../../components/universityEvent/eventInformationDrawer/EventInformationDrawer.tsx';
+import ReviewModal from '../../components/universityEvent/reviewModal/ReviewModal.tsx';
 
 
-export default function EventList({universityEvents}) {
+export default function EventList({ universityEvents }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [open, setOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [isRegisteredToCurrentEvent, setIsRegisteredToCurrentEvent] = useState(false);
-
 
 
   const getIsRegisteredToEvent = async (id) => {
@@ -23,12 +25,12 @@ export default function EventList({universityEvents}) {
   const registerToCurrentEvent = (id) => {
     registerToEvent(id);
     setIsRegisteredToCurrentEvent(true);
-  }
+  };
 
   const unregisterFromCurrentEvent = (id) => {
     unregisterFromEvent(id);
     setIsRegisteredToCurrentEvent(false);
-  }
+  };
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
@@ -36,10 +38,6 @@ export default function EventList({universityEvents}) {
     getIsRegisteredToEvent(event.id);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    // setSelectedEvent(null);
-  };
 
   return (
     <div className="events">
@@ -49,41 +47,21 @@ export default function EventList({universityEvents}) {
         </div>
       ))}
 
-      <Drawer anchor="right" open={open} onClose={handleClose}>
-        <Box sx={{ width: 300, padding: 2 }}>
-          <Typography variant="h6" gutterBottom>{selectedEvent?.title}</Typography>
-          <Typography variant="body2" gutterBottom>{selectedEvent?.description}</Typography>
-          <Typography variant="subtitle2" gutterBottom><strong>Location:</strong> {selectedEvent?.location}</Typography>
-          <Typography variant="subtitle2"
-                      gutterBottom><strong>Date:</strong> {new Date(selectedEvent?.eventDate).toLocaleString()}
-          </Typography>
 
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-            onClick={() => {
-              if (isRegisteredToCurrentEvent) {
-                unregisterFromCurrentEvent(selectedEvent?.id);
-              } else {
-                registerToCurrentEvent(selectedEvent?.id);
-              }
-            }}
-          >
-            {isRegisteredToCurrentEvent ? 'Unregister' : 'Register'}
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            fullWidth
-            sx={{ mt: 1 }}
-            onClick={handleClose}
-          >
-            Close
-          </Button>
-        </Box>
-      </Drawer>
+      <EventInformationDrawer
+        open={open}
+        setOpen={setOpen}
+        selectedEvent={selectedEvent}
+        isRegisteredToCurrentEvent={isRegisteredToCurrentEvent}
+        registerToCurrentEvent={registerToCurrentEvent}
+        unregisterFromCurrentEvent={unregisterFromCurrentEvent}
+        setReviewModalOpen={setReviewModalOpen}
+      />
+      <ReviewModal
+        reviewModalOpen={reviewModalOpen}
+        setReviewModalOpen={setReviewModalOpen}
+        currentEventId={1}
+      />
     </div>
   );
 }

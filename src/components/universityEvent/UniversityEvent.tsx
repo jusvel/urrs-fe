@@ -11,7 +11,7 @@ export default function UniversityEvent({ universityEvent }) {
 
   return <div className="event-card">
     <div className="event-photo">
-
+      <img src={"4620528.webp"} width={"100%"} height={"100%"}/>
     </div>
     <div className="event-details">
       <p className="details-title">
