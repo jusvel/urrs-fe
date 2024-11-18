@@ -1,0 +1,6 @@
+.event-list {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  margin-top: 30px;
+}

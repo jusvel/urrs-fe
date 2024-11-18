@@ -12,13 +12,14 @@ import React, { useState } from 'react';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { deleteEvent, updateEvent } from '../../../api/eventsApi.ts';
 
 export default function EditPanel({
                                     setOpen,
                                     selectedEvent,
                                     eventAttendeeCount,
+                                    fetchAllEvents,
                                   }) {
   const [title, setTitle] = useState(selectedEvent.title);
   const [description, setDescription] = useState(selectedEvent.description);
@@ -27,16 +28,23 @@ export default function EditPanel({
   const [confirmationOpen, setConfirmationOpen] = useState(false);
 
   const deleteCurrentEvent = () => {
-    deleteEvent(selectedEvent.id)
-    setConfirmationOpen(false)
-  }
+    deleteEvent(selectedEvent.id).then(() => {
+      setConfirmationOpen(false);
+      fetchAllEvents();
+
+    });
+  };
 
   const updateCurrentEvent = () => {
-    const dateToSend = date.toISOString().replace("Z"," ").replace("T", " ")
-    updateEvent(selectedEvent.id, title, description, location, dateToSend);
-  }
+    const dateToSend = date.toISOString().replace('Z', ' ').replace('T', ' ');
+    updateEvent(selectedEvent.id, title, description, location, dateToSend).then(() => {
+      setOpen(false);
+      fetchAllEvents();
 
-  return <Box sx={{ width: 500, padding: 2, display: 'flex', flexDirection: 'column', height: "100%"}}>
+    });
+  };
+
+  return <Box sx={{ width: 500, padding: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
     <TextField
       sx={{ mt: 2 }}
       id="outlined-controlled"
@@ -77,14 +85,15 @@ export default function EditPanel({
           label="Renginio data"
           ampm={false}
           onChange={(newValue) => {
-            setDate(newValue)
+            setDate(newValue);
           }}
           value={date}
         />
       </DemoContainer>
     </LocalizationProvider>
 
-    <Typography variant="subtitle2" gutterBottom sx={{ mt: 10 }}><strong>Užsiregistravusių dalyvių skaičius:</strong> {eventAttendeeCount}</Typography>
+    <Typography variant="subtitle2" gutterBottom sx={{ mt: 10 }}><strong>Užsiregistravusių dalyvių
+      skaičius:</strong> {eventAttendeeCount}</Typography>
     <Button
       variant="contained"
       color="primary"
@@ -100,7 +109,7 @@ export default function EditPanel({
       fullWidth
       sx={{ mt: 2 }}
       onClick={() => {
-        setConfirmationOpen(true)
+        setConfirmationOpen(true);
       }}
     >
       Ištrinti renginį
@@ -109,13 +118,13 @@ export default function EditPanel({
       variant="outlined"
       color="secondary"
       fullWidth
-      sx={{ mt: 5, alignSelf: 'flex-end'}}
+      sx={{ mt: 5, alignSelf: 'flex-end' }}
       onClick={() => setOpen(false)}
     >
       Atšaukti
     </Button>
 
-    <Dialog open={confirmationOpen} onClose={()=>setConfirmationOpen(false)}>
+    <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
       <DialogContent>
         Ar tikrai norite ištrinti šį renginį?
       </DialogContent>
@@ -123,7 +132,7 @@ export default function EditPanel({
         <Button size="small" variant="contained" color="error" onClick={deleteCurrentEvent}>
           Taip
         </Button>
-        <Button size="small" variant="outlined" color="secondary" onClick={()=>setConfirmationOpen(false)}>
+        <Button size="small" variant="outlined" color="secondary" onClick={() => setConfirmationOpen(false)}>
           Ne
         </Button>
       </DialogActions>

@@ -14,24 +14,25 @@ export default function EventInformationDrawer({
                                                  unregisterFromCurrentEvent,
                                                  setReviewModalOpen,
                                                  eventAttendeeCount,
+                                                 fetchAllEvents,
                                                }) {
   const [isCurrentUserAuthor, setIsCurrentUserAuthor] = useState(false);
 
   useEffect(() => {
     getCurrentUserId().then(data => {
       if (selectedEvent?.userId == data.data) setIsCurrentUserAuthor(true);
-      else setIsCurrentUserAuthor(false)
+      else setIsCurrentUserAuthor(false);
     });
   }, [selectedEvent]);
 
   return (
     <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-
       {isCurrentUserAuthor ?
         <EditPanel
           setOpen={setOpen}
           selectedEvent={selectedEvent}
           eventAttendeeCount={eventAttendeeCount}
+          fetchAllEvents={fetchAllEvents}
         />
         :
         <ViewPanel

@@ -3,9 +3,15 @@ import React, { useEffect, useState } from 'react';
 import EventInformationDrawer from '../../components/universityEvent/eventInformationDrawer/EventInformationDrawer.tsx';
 import ReviewModal from '../../components/universityEvent/reviewModal/ReviewModal.tsx';
 import { getAttendeeCount, isRegisteredToEvent, registerToEvent, unregisterFromEvent } from '../../api/attendeesApi.ts';
+import "./EventList.css"
 
+interface EventListProps {
+  universityEvents: any,
+  isLoading: false,
+  fetchAllEvents: void,
+}
 
-export default function EventList({ universityEvents }) {
+export default function EventList({ universityEvents, isLoading, fetchAllEvents }: EventListProps) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [open, setOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -18,10 +24,10 @@ export default function EventList({ universityEvents }) {
     setIsRegisteredToCurrentEvent(response.data);
   };
 
-  const getCurrentEventAttendeeCount = async(id) => {
+  const getCurrentEventAttendeeCount = async (id) => {
     const response = await getAttendeeCount(id);
     setEventAttendeeCount(response.data);
-  }
+  };
 
   const registerToCurrentEvent = (id) => {
     registerToEvent(id);
@@ -39,34 +45,36 @@ export default function EventList({ universityEvents }) {
     setSelectedEvent(event);
     setOpen(true);
     getIsRegisteredToEvent(event.id);
-    getCurrentEventAttendeeCount(event.id)
+    getCurrentEventAttendeeCount(event.id);
   };
 
 
-  return (
-    <div className="events">
-      {universityEvents.map(item => (
-        <div className="events" onClick={() => handleEventClick(item)} key={item.id}>
-          <UniversityEvent universityEvent={item} />
+  return (<div style={{width:"100%"}}>
+      {!isLoading ?
+        <div style={{width:"100%"}}>
+          {universityEvents.map(item => (
+            <div className={"event-list"} onClick={() => handleEventClick(item)} key={item.id}>
+              <UniversityEvent universityEvent={item} />
+            </div>
+          ))}
+          <EventInformationDrawer
+            open={open}
+            setOpen={setOpen}
+            selectedEvent={selectedEvent}
+            isRegisteredToCurrentEvent={isRegisteredToCurrentEvent}
+            registerToCurrentEvent={registerToCurrentEvent}
+            unregisterFromCurrentEvent={unregisterFromCurrentEvent}
+            setReviewModalOpen={setReviewModalOpen}
+            eventAttendeeCount={eventAttendeeCount}
+            fetchAllEvents={fetchAllEvents}
+          />
+          <ReviewModal
+            reviewModalOpen={reviewModalOpen}
+            setReviewModalOpen={setReviewModalOpen}
+            currentEventId={1}
+          />
         </div>
-      ))}
-
-
-      <EventInformationDrawer
-        open={open}
-        setOpen={setOpen}
-        selectedEvent={selectedEvent}
-        isRegisteredToCurrentEvent={isRegisteredToCurrentEvent}
-        registerToCurrentEvent={registerToCurrentEvent}
-        unregisterFromCurrentEvent={unregisterFromCurrentEvent}
-        setReviewModalOpen={setReviewModalOpen}
-        eventAttendeeCount={eventAttendeeCount}
-      />
-      <ReviewModal
-        reviewModalOpen={reviewModalOpen}
-        setReviewModalOpen={setReviewModalOpen}
-        currentEventId={1}
-      />
+      : <p>LOADING</p>}
     </div>
   );
 }
