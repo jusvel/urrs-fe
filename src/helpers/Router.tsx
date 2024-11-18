@@ -6,6 +6,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute.tsx';
 import HomePage from '../containers/homePage/HomePage.tsx';
 import CreateEvent from '../containers/createEvent/CreateEvent.tsx';
+import Users from '../containers/users/Users.tsx';
 
 export const router = createBrowserRouter(
   [
@@ -24,6 +25,10 @@ export const router = createBrowserRouter(
         {
           path: '/create-event',
           element: <CreateEvent/>
+        },
+        {
+          path: '/users',
+          element: <Users/>
         }
       ]
     }

@@ -1,4 +1,5 @@
 import "./SearchBar.css"
+import {getUserRole} from '../../helpers/axiosHelper.ts';
 
 export default function SearchBar() {
   return (

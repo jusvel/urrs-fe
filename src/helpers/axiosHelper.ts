@@ -1,7 +1,13 @@
 import axios from 'axios';
+import {jwtDecode} from 'jwt-decode';
 
 export const getAuthToken = () => {
   return window.localStorage.getItem('auth_token');
+}
+
+export const getUserRole = () => {
+  const decoded = jwtDecode(getAuthToken());
+  return decoded?.role;
 }
 
 export const isAuthenticated = () => {

@@ -24,8 +24,7 @@ export const createEvent = async (title, description, location, eventDate) => {
 
 export const getRegisteredEvents = async () => {
   try {
-    const response = request('GET', '/events/registered', {});
-    return response;
+    return request('GET', '/events/registered', {});
   } catch (error) {
     return error.response?.data?.message || 'An error occurred';
   }

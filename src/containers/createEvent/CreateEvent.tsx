@@ -2,14 +2,17 @@ import './CreateEvent.css'
 import {useState} from 'react';
 import {TextField} from '@mui/material';
 import {createEvent} from '../../api/eventsApi.ts';
+import {useNavigate} from 'react-router-dom';
 export default function CreateEvent () {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDesription] = useState("")
   const [location, setLocation] = useState("")
   const [eventDate, setEventDate] = useState("")
 
   const sendCreateEventRequest = () => {
-    createEvent(title, description, location, eventDate)
+    createEvent(title, description, location, eventDate);
+    navigate('/')
   }
 
   return <div className={"event-form"}>
