@@ -1,6 +1,9 @@
 import './EventInformationDrawer.css';
 import { Box, Button, Drawer, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ViewPanel from './ViewPanel.tsx';
+import { getCurrentUserId } from '../../../api/loginApi.ts';
+import EditPanel from './EditPanel.tsx';
 
 export default function EventInformationDrawer({
                                                  open,
@@ -12,53 +15,35 @@ export default function EventInformationDrawer({
                                                  setReviewModalOpen,
                                                  eventAttendeeCount,
                                                }) {
+  const [isCurrentUserAuthor, setIsCurrentUserAuthor] = useState(false);
+
+  useEffect(() => {
+    getCurrentUserId().then(data => {
+      if (selectedEvent?.userId == data.data) setIsCurrentUserAuthor(true);
+      else setIsCurrentUserAuthor(false)
+    });
+  }, [selectedEvent]);
+
   return (
     <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-      <Box sx={{ width: 300, padding: 2 }}>
-        <Typography variant="h6" gutterBottom>{selectedEvent?.title}</Typography>
-        <Typography variant="body2" gutterBottom>{selectedEvent?.description}</Typography>
-        <Typography variant="subtitle2" gutterBottom><strong>Location:</strong> {selectedEvent?.location}</Typography>
-        <Typography variant="subtitle2" gutterBottom><strong>Attendee count:</strong> {eventAttendeeCount}</Typography>
-        <Typography variant="subtitle2"
-                    gutterBottom><strong>Date:</strong> {new Date(selectedEvent?.eventDate).toLocaleString()}
-        </Typography>
 
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-          onClick={() => {
-            if (isRegisteredToCurrentEvent) {
-              unregisterFromCurrentEvent(selectedEvent?.id);
-            } else {
-              registerToCurrentEvent(selectedEvent?.id);
-            }
-          }}
-        >
-          {isRegisteredToCurrentEvent ? 'Unregister' : 'Register'}
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-          onClick={() => {
-            setReviewModalOpen(true);
-          }}
-        >
-          Leave a Review
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          sx={{ mt: 5 }}
-          onClick={() => setOpen(false)}
-        >
-          Close
-        </Button>
-      </Box>
+      {isCurrentUserAuthor ?
+        <EditPanel
+          setOpen={setOpen}
+          selectedEvent={selectedEvent}
+          eventAttendeeCount={eventAttendeeCount}
+        />
+        :
+        <ViewPanel
+          setOpen={setOpen}
+          selectedEvent={selectedEvent}
+          isRegisteredToCurrentEvent={isRegisteredToCurrentEvent}
+          registerToCurrentEvent={registerToCurrentEvent}
+          unregisterFromCurrentEvent={unregisterFromCurrentEvent}
+          setReviewModalOpen={setReviewModalOpen}
+          eventAttendeeCount={eventAttendeeCount}
+        />
+      }
     </Drawer>
   );
 }

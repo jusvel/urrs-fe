@@ -30,4 +30,25 @@ export const getRegisteredEvents = async () => {
   }
 };
 
+export const updateEvent = async (eventId, title, description, location, eventDate) => {
+  try {
+    return request("PUT", `/events/${eventId}`, {
+      "title": title,
+      "description": description,
+      "location": location,
+      "eventDate": eventDate
+    })
+  } catch (error) {
+    return error.response?.data?.message || 'An error occurred';
+  }
+}
+
+export const deleteEvent = async (eventId) => {
+  try {
+    return request("DELETE", `/events/${eventId}`, {})
+  } catch (error) {
+    return error.response?.data?.message || 'An error occurred';
+  }
+}
+
 

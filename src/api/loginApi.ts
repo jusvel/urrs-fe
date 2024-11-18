@@ -13,3 +13,11 @@ export const login = async (email : string, password: string) => {
     return error.response?.data?.message || 'An error occurred';
   }
 };
+
+export const getCurrentUserId = async () => {
+  try {
+    return await request("GET", "/users/current", {});
+  } catch (error: any) {
+    return error.response?.data?.message || 'An error occurred';
+  }
+}
