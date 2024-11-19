@@ -9,13 +9,14 @@ export const getAllEvents = async () => {
   }
 };
 
-export const createEvent = async (title, description, location, eventDate) => {
+export const createEvent = async (title, description, location, eventDate, eventType) => {
   try{
     return request("POST", "/events", {
       "title": title,
       "description": description,
       "location": location,
-      "eventDate": eventDate
+      "eventDate": eventDate,
+      "eventType": eventType
     });
   } catch (error) {
     return error.response?.data?.message || 'An error occurred';
@@ -46,6 +47,14 @@ export const updateEvent = async (eventId, title, description, location, eventDa
 export const deleteEvent = async (eventId) => {
   try {
     return request("DELETE", `/events/${eventId}`, {})
+  } catch (error) {
+    return error.response?.data?.message || 'An error occurred';
+  }
+}
+
+export const getEventTypes = async () => {
+  try{
+    return request("GET", "/events/types", {})
   } catch (error) {
     return error.response?.data?.message || 'An error occurred';
   }

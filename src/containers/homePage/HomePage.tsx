@@ -3,7 +3,7 @@ import './HomePage.css';
 import Navbar from '../../components/navbar/Navbar.tsx';
 import SearchBar from '../../components/searchBar/SearchBar.tsx';
 import EventList from '../eventList/EventList.tsx';
-import { getAllEvents } from '../../api/eventsApi.ts'
+import { getAllEvents, getEventTypes } from '../../api/eventsApi.ts';
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
