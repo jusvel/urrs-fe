@@ -10,12 +10,17 @@ import dayjs from 'dayjs';
 
 export default function SearchBar() {
   const [eventTypes, setEventTypes] = useState([]);
-  const [selectedEventType, setSelectedEventType] = useState('CONCERT');
+  const [selectedEventType, setSelectedEventType] = useState('Concert');
   const [date, setDate] = useState(dayjs());
 
   const fetchAllEventTypes = async () => {
     const response = await getEventTypes();
-    setEventTypes(response.data);
+    const eventTypesUnprocessed = response.data;
+    setEventTypes(eventTypesUnprocessed.map((type) => {
+      const firstLetter = type.substring(0,1);
+      const remainingWord = type.substring(1).toLowerCase();
+      return firstLetter + remainingWord;
+    }));
   };
 
   useEffect(() => {
@@ -24,8 +29,8 @@ export default function SearchBar() {
 
   return (
     <div className="search-bar">
-      <Box sx={{ minWidth: 120, display:"flex", flexDirection:"row", width: "100%", alignContent:"center" }}>
-        <FormControl fullWidth sx={{ display:"flex", flexDirection:"row", width: "100%", justifyContent:"center"}}>
+      <Box>
+        <FormControl fullWidth sx={{ display:"flex", flexDirection:"row", width: "100%", justifyContent:"center", gap:"20px"}}>
           <InputLabel id="event-type-label">Renginio tipas</InputLabel>
           <Select
             labelId="event-type-label"
