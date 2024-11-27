@@ -4,16 +4,16 @@ import {
   Dialog,
   DialogActions, DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle, MenuItem, Select,
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import React, {useEffect, useState} from 'react';
+import {DateTimePicker, LocalizationProvider} from '@mui/x-date-pickers';
+import {DemoContainer} from '@mui/x-date-pickers/internals/demo';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { deleteEvent, updateEvent } from '../../../api/eventsApi.ts';
+import {deleteEvent, getEventTypes, updateEvent} from '../../../api/eventsApi.ts';
 
 export default function EditPanel({
                                     setOpen,
@@ -26,6 +26,28 @@ export default function EditPanel({
   const [location, setLocation] = useState(selectedEvent.location);
   const [date, setDate] = useState(dayjs(selectedEvent.eventDate));
   const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [selectedEventType, setSelectedEventType] = useState(selectedEvent.eventType);
+  const [eventTypes, setEventTypes] = useState([]);
+
+  const fetchEventTypes = async () => {
+    await getEventTypes().then(
+      (e) => setTypesToSelector(e)
+    );
+  }
+
+  const setTypesToSelector = (e) => {
+    setEventTypes(e)
+    e.map((type) => {
+      if (type.toUpperCase() == selectedEventType) {
+        setSelectedEventType(type)
+      }
+    })
+  }
+
+  useEffect(() => {
+    fetchEventTypes()
+
+  }, []);
 
   const deleteCurrentEvent = () => {
     deleteEvent(selectedEvent.id).then(() => {
@@ -37,16 +59,16 @@ export default function EditPanel({
 
   const updateCurrentEvent = () => {
     const dateToSend = date.toISOString().replace('Z', ' ').replace('T', ' ');
-    updateEvent(selectedEvent.id, title, description, location, dateToSend).then(() => {
+    updateEvent(selectedEvent.id, title, description, location, dateToSend, selectedEventType).then(() => {
       setOpen(false);
       fetchAllEvents();
 
     });
   };
 
-  return <Box sx={{ width: 500, padding: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
+  return <Box sx={{width: 500, padding: 2, display: 'flex', flexDirection: 'column', height: '100%'}}>
     <TextField
-      sx={{ mt: 2 }}
+      sx={{mt: 2}}
       id="outlined-controlled"
       label="Pavadinimas"
       fullWidth={true}
@@ -56,7 +78,7 @@ export default function EditPanel({
       }}
     />
     <TextField
-      sx={{ mt: 2 }}
+      sx={{mt: 2}}
       multiline={true}
       maxRows={7}
       id="outlined-controlled"
@@ -69,7 +91,7 @@ export default function EditPanel({
     />
 
     <TextField
-      sx={{ mt: 2 }}
+      sx={{mt: 2}}
       id="outlined-controlled"
       label="Vieta"
       fullWidth={true}
@@ -79,8 +101,20 @@ export default function EditPanel({
       }}
     />
 
+    <Select
+      sx={{mt: 2}}
+      label="Renginio tipas"
+      id="event-type-select"
+      value={selectedEventType}
+      onChange={(e) => setSelectedEventType(e.target.value)}
+    >
+      {eventTypes.map(type =>
+        <MenuItem key={type} value={type}>{type}</MenuItem>,
+      )}
+    </Select>
+
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateTimePicker']} sx={{ mt: 2 }}>
+      <DemoContainer components={['DateTimePicker']} sx={{mt: 2}}>
         <DateTimePicker
           label="Renginio data"
           ampm={false}
@@ -92,13 +126,13 @@ export default function EditPanel({
       </DemoContainer>
     </LocalizationProvider>
 
-    <Typography variant="subtitle2" gutterBottom sx={{ mt: 10 }}><strong>Užsiregistravusių dalyvių
+    <Typography variant="subtitle2" gutterBottom sx={{mt: 10}}><strong>Užsiregistravusių dalyvių
       skaičius:</strong> {eventAttendeeCount}</Typography>
     <Button
       variant="contained"
       color="primary"
       fullWidth
-      sx={{ mt: 2 }}
+      sx={{mt: 2}}
       onClick={updateCurrentEvent}
     >
       Išsaugoti
@@ -107,7 +141,7 @@ export default function EditPanel({
       variant="contained"
       color="warning"
       fullWidth
-      sx={{ mt: 2 }}
+      sx={{mt: 2}}
       onClick={() => {
         setConfirmationOpen(true);
       }}
@@ -118,7 +152,7 @@ export default function EditPanel({
       variant="outlined"
       color="secondary"
       fullWidth
-      sx={{ mt: 5, alignSelf: 'flex-end' }}
+      sx={{mt: 5, alignSelf: 'flex-end'}}
       onClick={() => setOpen(false)}
     >
       Atšaukti

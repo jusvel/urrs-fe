@@ -14,13 +14,7 @@ export default function SearchBar() {
   const [date, setDate] = useState(dayjs());
 
   const fetchAllEventTypes = async () => {
-    const response = await getEventTypes();
-    const eventTypesUnprocessed = response.data;
-    setEventTypes(eventTypesUnprocessed.map((type) => {
-      const firstLetter = type.substring(0,1);
-      const remainingWord = type.substring(1).toLowerCase();
-      return firstLetter + remainingWord;
-    }));
+    setEventTypes(await getEventTypes());
   };
 
   useEffect(() => {
@@ -29,14 +23,11 @@ export default function SearchBar() {
 
   return (
     <div className="search-bar">
-      <Box>
-        <FormControl fullWidth sx={{ display:"flex", flexDirection:"row", width: "100%", justifyContent:"center", gap:"20px"}}>
-          <InputLabel id="event-type-label">Renginio tipas</InputLabel>
+      <Box >
+        <FormControl fullWidth size="small" sx={{ display:"flex", flexDirection:"row", width: "100%", justifyContent:"center", gap:"20px"}}>
           <Select
-            labelId="event-type-label"
             id="event-type-select"
             value={selectedEventType}
-            label="Age"
             onChange={(e) => setSelectedEventType(e.target.value)}
           >
             {eventTypes.map(type =>
@@ -44,9 +35,8 @@ export default function SearchBar() {
             )}
           </Select>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']} sx={{ }}>
+            <DemoContainer components={['DatePicker']} sx={{ padding: "0"}}>
               <DatePicker
-                label="Renginio data"
                 onChange={(newValue) => {
                   setDate(newValue);
                 }}
@@ -57,7 +47,10 @@ export default function SearchBar() {
           <TextField>
 
           </TextField>
-          <Button>
+          <Button
+          variant="contained"
+          color="success"
+          >
             Ieškoti
           </Button>
         </FormControl>

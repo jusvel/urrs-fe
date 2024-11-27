@@ -16,7 +16,7 @@ export const createEvent = async (title, description, location, eventDate, event
       "description": description,
       "location": location,
       "eventDate": eventDate,
-      "eventType": eventType
+      "eventType": eventType.toUpperCase()
     });
   } catch (error) {
     return error.response?.data?.message || 'An error occurred';
@@ -31,13 +31,14 @@ export const getRegisteredEvents = async () => {
   }
 };
 
-export const updateEvent = async (eventId, title, description, location, eventDate) => {
+export const updateEvent = async (eventId, title, description, location, eventDate, eventType) => {
   try {
     return request("PUT", `/events/${eventId}`, {
       "title": title,
       "description": description,
       "location": location,
-      "eventDate": eventDate
+      "eventDate": eventDate,
+      "eventType": eventType.toUpperCase()
     })
   } catch (error) {
     return error.response?.data?.message || 'An error occurred';
@@ -54,7 +55,13 @@ export const deleteEvent = async (eventId) => {
 
 export const getEventTypes = async () => {
   try{
-    return request("GET", "/events/types", {})
+    const response = await request("GET", "/events/types", {})
+    const eventTypesUnprocessed = response.data;
+    return eventTypesUnprocessed.map((type) => {
+      const firstLetter = type.substring(0,1);
+      const remainingWord = type.substring(1).toLowerCase();
+      return firstLetter + remainingWord;
+    })
   } catch (error) {
     return error.response?.data?.message || 'An error occurred';
   }

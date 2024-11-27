@@ -1,8 +1,8 @@
 import UniversityEvent from '../../components/universityEvent/UniversityEvent.tsx';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import EventInformationDrawer from '../../components/universityEvent/eventInformationDrawer/EventInformationDrawer.tsx';
 import ReviewModal from '../../components/universityEvent/reviewModal/ReviewModal.tsx';
-import { getAttendeeCount, isRegisteredToEvent, registerToEvent, unregisterFromEvent } from '../../api/attendeesApi.ts';
+import {getAttendeeCount, isRegisteredToEvent, registerToEvent, unregisterFromEvent} from '../../api/attendeesApi.ts';
 import "./EventList.css"
 
 interface EventListProps {
@@ -11,7 +11,7 @@ interface EventListProps {
   fetchAllEvents: void,
 }
 
-export default function EventList({ universityEvents, isLoading, fetchAllEvents }: EventListProps) {
+export default function EventList({universityEvents, isLoading, fetchAllEvents}: EventListProps) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [open, setOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
@@ -30,15 +30,17 @@ export default function EventList({ universityEvents, isLoading, fetchAllEvents 
   };
 
   const registerToCurrentEvent = (id) => {
-    registerToEvent(id);
-    setIsRegisteredToCurrentEvent(true);
-    getCurrentEventAttendeeCount(id);
+    registerToEvent(id).then(() => {
+      getCurrentEventAttendeeCount(id);
+      setIsRegisteredToCurrentEvent(true);
+    });
   };
 
   const unregisterFromCurrentEvent = (id) => {
-    unregisterFromEvent(id);
-    setIsRegisteredToCurrentEvent(false);
-    getCurrentEventAttendeeCount(id);
+    unregisterFromEvent(id).then(() => {
+      setIsRegisteredToCurrentEvent(false);
+      getCurrentEventAttendeeCount(id);
+    });
   };
 
   const handleEventClick = (event) => {
@@ -49,12 +51,12 @@ export default function EventList({ universityEvents, isLoading, fetchAllEvents 
   };
 
 
-  return (<div style={{width:"100%"}}>
+  return (<div style={{width: "100%"}}>
       {!isLoading ?
-        <div style={{width:"100%"}}>
+        <div style={{width: "100%"}}>
           {universityEvents.map(item => (
             <div className={"event-list"} onClick={() => handleEventClick(item)} key={item.id}>
-              <UniversityEvent universityEvent={item} />
+              <UniversityEvent universityEvent={item}/>
             </div>
           ))}
           <EventInformationDrawer
@@ -74,7 +76,7 @@ export default function EventList({ universityEvents, isLoading, fetchAllEvents 
             currentEventId={1}
           />
         </div>
-      : <p>LOADING</p>}
+        : <p>LOADING</p>}
     </div>
   );
 }
