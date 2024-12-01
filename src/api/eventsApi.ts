@@ -54,11 +54,12 @@ export const deleteEvent = async (eventId) => {
 }
 
 export const getEventTypes = async () => {
-  try{
+
+  try {
     const response = await request("GET", "/events/types", {})
     const eventTypesUnprocessed = response.data;
     return eventTypesUnprocessed.map((type) => {
-      const firstLetter = type.substring(0,1);
+      const firstLetter = type.substring(0, 1);
       const remainingWord = type.substring(1).toLowerCase();
       return firstLetter + remainingWord;
     })
@@ -67,5 +68,18 @@ export const getEventTypes = async () => {
     // return error.response?.data?.message || 'An error occurred';
   }
 }
+export const getEventsByFilter = async (filter: { title?: string, eventDate?: string, eventType?: string }) => {
+  try {
+    console.log("Filter used for request:", filter);
+    const response = await request("POST", "/events/filter", filter);
+    console.log("Response data:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error response:", error);
+    return error.response?.data?.message || 'An error occurred';
+  }
+};
+
+
 
 

@@ -7,6 +7,7 @@ import ProtectedRoute from './ProtectedRoute.tsx';
 import HomePage from '../containers/homePage/HomePage.tsx';
 import CreateEvent from '../containers/createEvent/CreateEvent.tsx';
 import Users from '../containers/users/Users.tsx';
+import SearchBar from '../components/searchBar/SearchBar.tsx';
 
 export const router = createBrowserRouter(
   [
@@ -29,6 +30,10 @@ export const router = createBrowserRouter(
         {
           path: '/users',
           element: <Users/>
+        },
+        {
+          path: '/filter',
+          element: <SearchBar/>
         }
       ]
     }

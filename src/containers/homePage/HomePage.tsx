@@ -24,7 +24,7 @@ export default function HomePage() {
   return (
     <div className="root-div">
       <Navbar />
-      <SearchBar />
+      <SearchBar setUniversityEvents={setUniversityEvents}/>
       <EventList universityEvents={universityEvents} isLoading={isLoading} fetchAllEvents={fetchAllEvents}/>
     </div>
   );

@@ -1,14 +1,16 @@
 import './SearchBar.css';
 import { getUserRole } from '../../helpers/axiosHelper.ts';
 import React, { useEffect, useState } from 'react';
-import { getEventTypes } from '../../api/eventsApi.ts';
+import { getEventTypes , getEventsByFilter } from '../../api/eventsApi.ts';
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
-
-export default function SearchBar() {
+interface SearchBarProps {
+  setUniversityEvents: React.Dispatch<React.SetStateAction<any[]>>;
+}
+export default function SearchBar({setUniversityEvents}: SearchBarProps) {
   const [eventTypes, setEventTypes] = useState([]);
   const [selectedEventType, setSelectedEventType] = useState('Concert');
   const [date, setDate] = useState(dayjs());
@@ -21,6 +23,19 @@ export default function SearchBar() {
   useEffect(() => {
     fetchAllEventTypes();
   }, []);
+
+  const sendGetEventsByFilterRequest = async () => {
+    const filter = {
+      title: '',
+      eventDate: date ? date.format('YYYY-MM-DD') : null,
+      eventType: selectedEventType.toUpperCase(),
+    };
+    try {
+      const events = await getEventsByFilter(filter);
+      setUniversityEvents(events);
+    } catch (error) {
+    }
+  };
 
   return (
     <div className="search-bar">
@@ -51,6 +66,7 @@ export default function SearchBar() {
           <Button
           variant="contained"
           color="success"
+          onClick={sendGetEventsByFilterRequest}
           >
             Ieškoti
           </Button>
