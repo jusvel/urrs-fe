@@ -63,7 +63,8 @@ export const getEventTypes = async () => {
       return firstLetter + remainingWord;
     })
   } catch (error) {
-    return error.response?.data?.message || 'An error occurred';
+    return []
+    // return error.response?.data?.message || 'An error occurred';
   }
 }
 

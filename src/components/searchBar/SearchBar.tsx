@@ -14,7 +14,8 @@ export default function SearchBar() {
   const [date, setDate] = useState(dayjs());
 
   const fetchAllEventTypes = async () => {
-    setEventTypes(await getEventTypes());
+    const e = await getEventTypes()
+    setEventTypes(e);
   };
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function SearchBar() {
             value={selectedEventType}
             onChange={(e) => setSelectedEventType(e.target.value)}
           >
-            {eventTypes.map(type =>
+            {eventTypes?.map(type =>
               <MenuItem value={type}>{type}</MenuItem>,
             )}
           </Select>
