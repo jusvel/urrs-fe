@@ -13,7 +13,7 @@ import {DateTimePicker, LocalizationProvider} from '@mui/x-date-pickers';
 import {DemoContainer} from '@mui/x-date-pickers/internals/demo';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import {deleteEvent, getEventTypes, updateEvent} from '../../../api/eventsApi.ts';
+import { deleteEvent, generateReport, getEventTypes, updateEvent } from '../../../api/eventsApi.ts';
 
 export default function EditPanel({
                                     setOpen,
@@ -28,11 +28,19 @@ export default function EditPanel({
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [selectedEventType, setSelectedEventType] = useState(selectedEvent.eventType);
   const [eventTypes, setEventTypes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchEventTypes = async () => {
     await getEventTypes().then(
       (e) => setTypesToSelector(e)
     );
+  }
+
+  const downloadReport = async () => {
+    setLoading(true)
+    await generateReport(selectedEvent.id).then(() => {
+      setLoading(false);
+    })
   }
 
   const setTypesToSelector = (e) => {
@@ -136,6 +144,15 @@ export default function EditPanel({
       onClick={updateCurrentEvent}
     >
       Išsaugoti
+    </Button>
+    <Button
+      variant="contained"
+      color="success"
+      fullWidth
+      sx={{mt:2}}
+      onClick={downloadReport}
+    >
+      Atsisiųsti ataskaitą
     </Button>
     <Button
       variant="contained"
