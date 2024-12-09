@@ -10,6 +10,8 @@ export default function ViewPanel({
                                     setReviewModalOpen,
                                     eventAttendeeCount,
                                   }) {
+
+  console.log(isRegisteredToCurrentEvent)
   return <Box sx={{ width: 300, padding: 2 }}>
     <Typography variant="h6" gutterBottom>{selectedEvent?.title}</Typography>
     <Typography variant="body2" gutterBottom>{selectedEvent?.description}</Typography>
@@ -23,7 +25,7 @@ export default function ViewPanel({
       variant="contained"
       color="primary"
       fullWidth
-      disabled={(new Date() > selectedEvent.eventDate)}
+      disabled={(new Date() > selectedEvent.eventDate) || (selectedEvent?.registrationEnd != null && (selectedEvent.registrationEnd < new Date())) }
       sx={{ mt: 2 }}
       onClick={() => {
         if (isRegisteredToCurrentEvent) {
@@ -33,7 +35,12 @@ export default function ViewPanel({
         }
       }}
     >
-      {isRegisteredToCurrentEvent ? 'Užsiregistruoti' : 'Atšaukti registraciją'}
+      {
+        ((selectedEvent?.registrationEnd != null && (selectedEvent.registrationEnd < new Date()))) ? ('Registracija baigta')
+          :
+        (isRegisteredToCurrentEvent ? 'Atšaukti registraciją' : 'Registruotis')
+
+      }
     </Button>
     <Button
       disabled={(new Date() < selectedEvent.eventDate)}
