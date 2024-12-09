@@ -34,6 +34,12 @@ export default function UniversityEvent({ universityEvent }) {
       <p className="date-time">
         {time}
       </p>
+      {
+        (new Date() > eventDate) &&
+      <p className="date-time" style={{color:"red", fontSize:"16px"}}>
+        Pasibaigęs
+      </p>
+      }
     </div>
   </div>
 }

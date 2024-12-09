@@ -23,6 +23,7 @@ export default function ViewPanel({
       variant="contained"
       color="primary"
       fullWidth
+      disabled={(new Date() > selectedEvent.eventDate)}
       sx={{ mt: 2 }}
       onClick={() => {
         if (isRegisteredToCurrentEvent) {
@@ -35,6 +36,7 @@ export default function ViewPanel({
       {isRegisteredToCurrentEvent ? 'Užsiregistruoti' : 'Atšaukti registraciją'}
     </Button>
     <Button
+      disabled={(new Date() < selectedEvent.eventDate)}
       variant="contained"
       color="primary"
       fullWidth
