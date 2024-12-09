@@ -41,14 +41,14 @@ export default function ReviewModal({ reviewModalOpen, setReviewModalOpen, curre
   >
     <Box sx={style}>
       <Typography id="modal-modal-title" variant="h6" component="h2">
-        Leave a review for this event
+        Palikite atsiliepimą šiam renginiui
       </Typography>
       <TextField
         multiline
         rows={7}
         sx={{ mt: 2 }}
         id="outlined-controlled"
-        label="Comment"
+        label="Komentaras"
         value={reviewText}
         onChange={(event) => {
           setReviewText(event.target.value);
@@ -74,7 +74,7 @@ export default function ReviewModal({ reviewModalOpen, setReviewModalOpen, curre
         sx={{ mt: 2 }}
         onClick={createReviewForEvent}
       >
-        Leave a Review
+        Palikti atsiliepimą
       </Button>
       <Button
         variant="outlined"
@@ -83,7 +83,7 @@ export default function ReviewModal({ reviewModalOpen, setReviewModalOpen, curre
         sx={{ mt: 2 }}
         onClick={closeModal}
       >
-        Close
+        Uždaryti
       </Button>
     </Box>
   </Modal>;

@@ -1,4 +1,5 @@
-import {request} from '../helpers/axiosHelper.ts';
+import {getAuthToken, request} from '../helpers/axiosHelper.ts';
+import axios from 'axios';
 
 export const getAllEvents = async () => {
   try {
@@ -80,6 +81,28 @@ export const getEventsByFilter = async (filter: { title?: string, eventDate?: st
   }
 };
 
-
+export const generateReport = async (eventId) => {
+  const token = getAuthToken();
+  let headers = {};
+  if(token !==null && token !== "null") {
+    headers = {'Authorization': `Bearer ${token}`}
+  }
+  axios
+    .get(`events/${eventId}/export`,
+      { responseType: 'blob', headers })
+    .then(response => {
+      const blob = new Blob([response.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `event_${eventId}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }).catch(e => {
+    console.error("Error exporting event details", e);
+  });
+};
 
 

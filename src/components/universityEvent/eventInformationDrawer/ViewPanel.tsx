@@ -32,7 +32,7 @@ export default function ViewPanel({
         }
       }}
     >
-      {isRegisteredToCurrentEvent ? 'Unregister' : 'Register'}
+      {isRegisteredToCurrentEvent ? 'Užsiregistruoti' : 'Atšaukti registraciją'}
     </Button>
     <Button
       variant="contained"
@@ -43,7 +43,7 @@ export default function ViewPanel({
         setReviewModalOpen(true);
       }}
     >
-      Leave a Review
+      Palikti atsiliepimą
     </Button>
     <Button
       variant="outlined"
@@ -52,7 +52,7 @@ export default function ViewPanel({
       sx={{ mt: 5 }}
       onClick={() => setOpen(false)}
     >
-      Close
+      Uždaryti
     </Button>
   </Box>
 }
